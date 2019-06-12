@@ -28,10 +28,10 @@
                 android:layout_height="50dp"
                 android:layout_centerInParent="true"
                 android:elevation="10dp"
-                app:btn_color="@android:color/darker_gray"
-                app:btn_fill_color="#f26d7d"
-                app:siShape="@raw/heart"
-                app:unSiShape="@raw/like" />
+                app:checkColor="#f26d7d"
+                app:checkDrawable="@raw/heart"
+                app:unCheckColor="@android:color/darker_gray"
+                app:unCheckDrawable="@raw/like" />
 
         </RelativeLayout>
 
@@ -74,76 +74,4 @@
         android:text="Dialog Demo"
         android:visibility="gone" />
 
-
-    <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/card_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="200dp"
-        android:layout_marginBottom="5dp"
-        android:visibility="gone"
-        card_view:cardBackgroundColor="@android:color/white"
-        card_view:cardCornerRadius="10dp"
-        card_view:cardElevation="24dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/image_view"
-                android:layout_width="375dp"
-                android:layout_height="160dp"
-                android:layout_gravity="center_horizontal"
-                android:scaleType="centerCrop" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="51dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/title_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:maxLines="3"
-                    android:text="pavel" />
-
-                <com.sackcentury.shinebuttonlib.ShineButton
-                    android:id="@+id/po_image8"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerInParent="true"
-                    android:layout_centerVertical="true"
-                    android:layout_gravity="right"
-                    app:btn_color="#FF6666"
-                    app:btn_fill_color="#999933"
-                    app:siShape="@raw/heart" />
-
-                <TextView
-                    android:id="@+id/movie_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_margin="8dp"
-                    android:text="robin" />
-
-            </RelativeLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-
-            </LinearLayout>
-
-
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
 </LinearLayout>

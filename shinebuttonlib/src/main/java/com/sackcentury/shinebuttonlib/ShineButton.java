@@ -35,10 +35,10 @@ public class ShineButton extends PorterImageView {
     private static final String TAG = "ShineButton";
     private boolean isChecked = false;
 
-    private int btnColor;
-    private int btnFillColor;
-    private Drawable siShapeDrawable;
-    private Drawable unSiShapeDrawable;
+    private int unCheckColor;
+    private int checkColor;
+    private Drawable checkDrawable;
+    private Drawable unCheckDrawable;
     private DisplayMetrics metrics = new DisplayMetrics();
 
     Activity activity;
@@ -71,8 +71,8 @@ public class ShineButton extends PorterImageView {
             init((Activity) context);
         }
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ShineButton);
-        btnColor = a.getColor(R.styleable.ShineButton_btn_color, Color.GRAY);
-        btnFillColor = a.getColor(R.styleable.ShineButton_btn_fill_color, Color.BLACK);
+        unCheckColor = a.getColor(R.styleable.ShineButton_unCheckColor, Color.GRAY);
+        checkColor = a.getColor(R.styleable.ShineButton_checkColor, Color.BLACK);
         shineParams.allowRandomColor = a.getBoolean(R.styleable.ShineButton_allow_random_color, false);
         shineParams.animDuration = a.getInteger(R.styleable.ShineButton_shine_animation_duration, (int) shineParams.animDuration);
         shineParams.bigShineColor = a.getColor(R.styleable.ShineButton_big_shine_color, shineParams.bigShineColor);
@@ -84,8 +84,8 @@ public class ShineButton extends PorterImageView {
         shineParams.smallShineColor = a.getColor(R.styleable.ShineButton_small_shine_color, shineParams.smallShineColor);
         shineParams.smallShineOffsetAngle = a.getFloat(R.styleable.ShineButton_small_shine_offset_angle, shineParams.smallShineOffsetAngle);
         shineParams.shineSize = a.getDimensionPixelSize(R.styleable.ShineButton_shine_size, shineParams.shineSize);
-        siShapeDrawable = a.getDrawable(R.styleable.ShineButton_siShape);
-        unSiShapeDrawable = a.getDrawable(R.styleable.ShineButton_unSiShape);
+        checkDrawable = a.getDrawable(R.styleable.ShineButton_checkDrawable);
+        unCheckDrawable = a.getDrawable(R.styleable.ShineButton_unCheckDrawable);
         a.recycle();
         updateDrawableState();
     }
@@ -98,21 +98,21 @@ public class ShineButton extends PorterImageView {
     }
 
     public int getColor() {
-        return btnFillColor;
+        return checkColor;
     }
 
     public boolean isChecked() {
         return isChecked;
     }
 
-
-    public void setBtnColor(int btnColor) {
-        this.btnColor = btnColor;
+    public void setUnCheckColor(int unCheckColor) {
+        this.unCheckColor = unCheckColor;
         updateDrawableState();
     }
 
-    public void setBtnFillColor(int btnFillColor) {
-        this.btnFillColor = btnFillColor;
+    public void setCheckColor(int checkColor) {
+        this.checkColor = checkColor;
+        updateDrawableState();
     }
 
     public void setChecked(boolean checked, boolean anim) {
@@ -253,8 +253,8 @@ public class ShineButton extends PorterImageView {
     }
 
     public void setShapeResource(int checkRaw, int unCheckRaw) {
-        siShapeDrawable = ContextCompat.getDrawable(activity, checkRaw);
-        unSiShapeDrawable = ContextCompat.getDrawable(activity, unCheckRaw);
+        checkDrawable = ContextCompat.getDrawable(activity, checkRaw);
+        unCheckDrawable = ContextCompat.getDrawable(activity, unCheckRaw);
         updateDrawableState();
     }
 
@@ -345,12 +345,12 @@ public class ShineButton extends PorterImageView {
 
     protected void updateDrawableState() {
         if (isChecked) {
-            if (siShapeDrawable != null) {
-                tintImageViewDrawable(siShapeDrawable, btnFillColor);
+            if (checkDrawable != null) {
+                tintImageViewDrawable(checkDrawable, checkColor);
             }
         } else {
-            if (unSiShapeDrawable != null) {
-                tintImageViewDrawable(unSiShapeDrawable, btnColor);
+            if (unCheckDrawable != null) {
+                tintImageViewDrawable(unCheckDrawable, unCheckColor);
             }
         }
     }

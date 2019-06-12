@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="ShineButton">
-        <attr name="btn_color" format="color" />
-        <attr name="btn_fill_color" format="color" />
+        <attr name="unCheckColor" format="color" />
+        <attr name="checkColor" format="color" />
         <attr name="shine_count" format="integer" />
         <attr name="shine_turn_angle" format="float" />
         <attr name="small_shine_offset_angle" format="float" />
@@ -14,7 +14,7 @@
         <attr name="click_animation_duration" format="integer" />
         <attr name="shine_distance_multiple" format="float" />
         <attr name="shine_size" format="dimension" />
-        <attr name="siShape" format="integer|reference" />
-        <attr name="unSiShape" format="integer|reference" />
+        <attr name="checkDrawable" format="integer|reference" />
+        <attr name="unCheckDrawable" format="integer|reference" />
     </declare-styleable>
 </resources>
