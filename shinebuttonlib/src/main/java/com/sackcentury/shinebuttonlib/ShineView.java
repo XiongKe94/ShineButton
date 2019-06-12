@@ -13,8 +13,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.daasuu.ei.Ease;
-import com.daasuu.ei.EasingInterpolator;
 
 import java.util.Random;
 
@@ -111,12 +109,9 @@ public class ShineView extends View {
         ValueAnimator.setFrameDelay(FRAME_REFRESH_DELAY);
         clickAnimator.setDuration(clickAnimDuration);
         clickAnimator.setInterpolator(new EasingInterpolator(Ease.QUART_OUT));
-        clickAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                clickValue = (float) valueAnimator.getAnimatedValue();
-                invalidate();
-            }
+        clickAnimator.addUpdateListener(valueAnimator -> {
+            clickValue = (float) valueAnimator.getAnimatedValue();
+            invalidate();
         });
         clickAnimator.addListener(new Animator.AnimatorListener() {
             @Override

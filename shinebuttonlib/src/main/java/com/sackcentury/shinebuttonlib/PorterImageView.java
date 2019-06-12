@@ -13,7 +13,9 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
 
-public abstract class PorterImageView extends android.support.v7.widget.AppCompatImageView {
+import androidx.appcompat.widget.AppCompatImageView;
+
+public abstract class PorterImageView extends AppCompatImageView {
     private static final String TAG = PorterImageView.class.getSimpleName();
 
     private static final PorterDuffXfermode PORTER_DUFF_XFERMODE = new PorterDuffXfermode(PorterDuff.Mode.DST_IN);
@@ -46,7 +48,7 @@ public abstract class PorterImageView extends android.support.v7.widget.AppCompa
     }
 
     private void setup(Context context, AttributeSet attrs, int defStyle) {
-        if(getScaleType() == ScaleType.FIT_CENTER) {
+        if (getScaleType() == ScaleType.FIT_CENTER) {
             setScaleType(ScaleType.CENTER_CROP);
         }
 
@@ -54,10 +56,10 @@ public abstract class PorterImageView extends android.support.v7.widget.AppCompa
         maskPaint.setColor(Color.BLACK);
     }
 
-    public void setSrcColor(int color){
+    public void setSrcColor(int color) {
         paintColor = color;
         setImageDrawable(new ColorDrawable(color));
-        if(drawablePaint!=null){
+        if (drawablePaint != null) {
             drawablePaint.setColor(color);
             invalidate();
         }
@@ -77,7 +79,7 @@ public abstract class PorterImageView extends android.support.v7.widget.AppCompa
     private void createMaskCanvas(int width, int height, int oldw, int oldh) {
         boolean sizeChanged = width != oldw || height != oldh;
         boolean isValid = width > 0 && height > 0;
-        if(isValid && (maskCanvas == null || sizeChanged)) {
+        if (isValid && (maskCanvas == null || sizeChanged)) {
             maskCanvas = new Canvas();
             maskBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
             maskCanvas.setBitmap(maskBitmap);
@@ -106,7 +108,7 @@ public abstract class PorterImageView extends android.support.v7.widget.AppCompa
                     if (drawable != null) {
                         invalidated = false;
                         Matrix imageMatrix = getImageMatrix();
-                        if (imageMatrix == null){// && mPaddingTop == 0 && mPaddingLeft == 0) {
+                        if (imageMatrix == null) {// && mPaddingTop == 0 && mPaddingLeft == 0) {
                             drawable.draw(drawableCanvas);
                         } else {
                             int drawableSaveCount = drawableCanvas.getSaveCount();

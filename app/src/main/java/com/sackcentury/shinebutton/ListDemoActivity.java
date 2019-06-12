@@ -64,12 +64,7 @@ public class ListDemoActivity extends Activity {
             TextView textView = (TextView) view.findViewById(R.id.text_item_id);
             textView.setText("ShineButton Position " + i);
             button.setChecked(dataList.get(i).checked);
-            button.setOnCheckStateChangeListener(new ShineButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(View view, boolean checked) {
-                    dataList.get(i).checked = checked;
-                }
-            });
+            button.setOnCheckStateChangeListener((view1, checked) -> dataList.get(i).checked = checked);
             return view;
         }
     }

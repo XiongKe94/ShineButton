@@ -3,9 +3,6 @@ package com.sackcentury.shinebuttonlib;
 import android.animation.ValueAnimator;
 import android.graphics.Canvas;
 
-import com.daasuu.ei.Ease;
-import com.daasuu.ei.EasingInterpolator;
-
 /**
  * @author Chad
  * @title com.sackcentury.shinebuttonlib
@@ -26,7 +23,8 @@ public class ShineAnimator extends ValueAnimator {
         setStartDelay(200);
         setInterpolator(new EasingInterpolator(Ease.QUART_OUT));
     }
-    ShineAnimator(long duration,float max_value,long delay) {
+
+    ShineAnimator(long duration, float max_value, long delay) {
         setFloatValues(1f, max_value);
         setDuration(duration);
         setStartDelay(delay);
@@ -41,6 +39,5 @@ public class ShineAnimator extends ValueAnimator {
     public void setCanvas(Canvas canvas) {
         this.canvas = canvas;
     }
-
 
 }
