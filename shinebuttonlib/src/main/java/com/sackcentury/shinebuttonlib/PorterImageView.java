@@ -56,7 +56,7 @@ public abstract class PorterImageView extends AppCompatImageView {
         maskPaint.setColor(Color.BLACK);
     }
 
-    public void setSrcColor(int color) {
+    private void setSrcColor(int color) {
         paintColor = color;
         setImageDrawable(new ColorDrawable(color));
         if (drawablePaint != null) {

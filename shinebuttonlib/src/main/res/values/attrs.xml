@@ -14,8 +14,7 @@
         <attr name="click_animation_duration" format="integer" />
         <attr name="shine_distance_multiple" format="float" />
         <attr name="shine_size" format="dimension" />
-    </declare-styleable>
-    <declare-styleable name="PorterImageView">
         <attr name="siShape" format="integer|reference" />
+        <attr name="unSiShape" format="integer|reference" />
     </declare-styleable>
 </resources>

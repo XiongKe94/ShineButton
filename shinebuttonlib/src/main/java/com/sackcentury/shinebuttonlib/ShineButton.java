@@ -7,7 +7,10 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -17,6 +20,9 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.LinearInterpolator;
 
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
+
 /**
  * @author Chad
  * @title com.sackcentury.shinebuttonlib
@@ -25,26 +31,21 @@ import android.view.animation.LinearInterpolator;
  * @date
  * @since 16/7/5 下午2:27
  **/
-public class ShineButton extends PorterShapeImageView {
+public class ShineButton extends PorterImageView {
     private static final String TAG = "ShineButton";
     private boolean isChecked = false;
 
     private int btnColor;
     private int btnFillColor;
-
-    int DEFAULT_WIDTH = 50;
-    int DEFAULT_HEIGHT = 50;
-
-    DisplayMetrics metrics = new DisplayMetrics();
-
+    private Drawable siShapeDrawable;
+    private Drawable unSiShapeDrawable;
+    private DisplayMetrics metrics = new DisplayMetrics();
 
     Activity activity;
-    ShineView shineView;
-    ValueAnimator shakeAnimator;
-    ShineView.ShineParams shineParams = new ShineView.ShineParams();
-
-    OnCheckedChangeListener listener;
-
+    private ShineView shineView;
+    private ValueAnimator shakeAnimator;
+    private ShineView.ShineParams shineParams = new ShineView.ShineParams();
+    private OnCheckedChangeListener listener;
     private int bottomHeight;
     private int realBottomHeight;
 
@@ -60,14 +61,12 @@ public class ShineButton extends PorterShapeImageView {
         initButton(context, attrs);
     }
 
-
     public ShineButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initButton(context, attrs);
     }
 
     private void initButton(Context context, AttributeSet attrs) {
-
         if (context instanceof Activity) {
             init((Activity) context);
         }
@@ -85,8 +84,10 @@ public class ShineButton extends PorterShapeImageView {
         shineParams.smallShineColor = a.getColor(R.styleable.ShineButton_small_shine_color, shineParams.smallShineColor);
         shineParams.smallShineOffsetAngle = a.getFloat(R.styleable.ShineButton_small_shine_offset_angle, shineParams.smallShineOffsetAngle);
         shineParams.shineSize = a.getDimensionPixelSize(R.styleable.ShineButton_shine_size, shineParams.shineSize);
+        siShapeDrawable = a.getDrawable(R.styleable.ShineButton_siShape);
+        unSiShapeDrawable = a.getDrawable(R.styleable.ShineButton_unSiShape);
         a.recycle();
-        setSrcColor(btnColor);
+        updateDrawableState();
     }
 
     public int getBottomHeight(boolean real) {
@@ -107,7 +108,7 @@ public class ShineButton extends PorterShapeImageView {
 
     public void setBtnColor(int btnColor) {
         this.btnColor = btnColor;
-        setSrcColor(this.btnColor);
+        updateDrawableState();
     }
 
     public void setBtnFillColor(int btnFillColor) {
@@ -121,13 +122,15 @@ public class ShineButton extends PorterShapeImageView {
     private void setChecked(boolean checked, boolean anim, boolean callBack) {
         isChecked = checked;
         if (checked) {
-            setSrcColor(btnFillColor);
+            updateDrawableState();
             isChecked = true;
-            if (anim) showAnim();
+            if (anim)
+                showAnim();
         } else {
-            setSrcColor(btnColor);
+            updateDrawableState();
             isChecked = false;
-            if (anim) setCancel();
+            if (anim)
+                setCancel();
         }
         if (callBack) {
             onListenerUpdate(checked);
@@ -145,7 +148,7 @@ public class ShineButton extends PorterShapeImageView {
     }
 
     public void setCancel() {
-        setSrcColor(btnColor);
+        updateDrawableState();
         if (shakeAnimator != null) {
             shakeAnimator.end();
             shakeAnimator.cancel();
@@ -211,14 +214,16 @@ public class ShineButton extends PorterShapeImageView {
         this.listener = listener;
     }
 
-
-    OnButtonClickListener onButtonClickListener;
+    private OnButtonClickListener onButtonClickListener;
 
     public void init(Activity activity) {
         this.activity = activity;
         onButtonClickListener = new OnButtonClickListener();
         setOnClickListener(onButtonClickListener);
+    }
 
+    @Override
+    protected void paintMaskCanvas(Canvas maskCanvas, Paint maskPaint, int width, int height) {
     }
 
     @Override
@@ -227,15 +232,9 @@ public class ShineButton extends PorterShapeImageView {
         calPixels();
     }
 
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-
-    }
-
     public void showAnim() {
         if (activity != null) {
-            final ViewGroup rootView = (ViewGroup) activity.findViewById(Window.ID_ANDROID_CONTENT);
+            final ViewGroup rootView = activity.findViewById(Window.ID_ANDROID_CONTENT);
             shineView = new ShineView(activity, this, shineParams);
             rootView.addView(shineView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             doShareAnim();
@@ -246,19 +245,17 @@ public class ShineButton extends PorterShapeImageView {
 
     public void removeView(View view) {
         if (activity != null) {
-            final ViewGroup rootView = (ViewGroup) activity.findViewById(Window.ID_ANDROID_CONTENT);
+            final ViewGroup rootView = activity.findViewById(Window.ID_ANDROID_CONTENT);
             rootView.removeView(view);
         } else {
             Log.e(TAG, "Please init.");
         }
     }
 
-    public void setShapeResource(int raw) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setShape(getResources().getDrawable(raw, null));
-        } else {
-            setShape(getResources().getDrawable(raw));
-        }
+    public void setShapeResource(int checkRaw, int unCheckRaw) {
+        siShapeDrawable = ContextCompat.getDrawable(activity, checkRaw);
+        unSiShapeDrawable = ContextCompat.getDrawable(activity, unCheckRaw);
+        updateDrawableState();
     }
 
     private void doShareAnim() {
@@ -267,27 +264,24 @@ public class ShineButton extends PorterShapeImageView {
         shakeAnimator.setDuration(500);
         shakeAnimator.setStartDelay(180);
         invalidate();
-        shakeAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                setScaleX((float) valueAnimator.getAnimatedValue());
-                setScaleY((float) valueAnimator.getAnimatedValue());
-            }
+        shakeAnimator.addUpdateListener(valueAnimator -> {
+            setScaleX((float) valueAnimator.getAnimatedValue());
+            setScaleY((float) valueAnimator.getAnimatedValue());
         });
         shakeAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animator) {
-                setSrcColor(btnFillColor);
+                updateDrawableState();
             }
 
             @Override
             public void onAnimationEnd(Animator animator) {
-                setSrcColor(isChecked ? btnFillColor : btnColor);
+                updateDrawableState();
             }
 
             @Override
             public void onAnimationCancel(Animator animator) {
-                setSrcColor(btnColor);
+                updateDrawableState();
             }
 
             @Override
@@ -347,6 +341,32 @@ public class ShineButton extends PorterShapeImageView {
 
     public interface OnCheckedChangeListener {
         void onCheckedChanged(View view, boolean checked);
+    }
+
+    protected void updateDrawableState() {
+        if (isChecked) {
+            if (siShapeDrawable != null) {
+                tintImageViewDrawable(siShapeDrawable, btnFillColor);
+            }
+        } else {
+            if (unSiShapeDrawable != null) {
+                tintImageViewDrawable(unSiShapeDrawable, btnColor);
+            }
+        }
+    }
+
+    private void tintImageViewDrawable(Drawable drawable, int tintColor) {
+        Drawable drawable1 = DrawableCompat.wrap(drawable);
+        this.setBackgroundDrawable(drawable1);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (tintColor != 0) {
+                DrawableCompat.setTint(drawable, tintColor);
+            }
+        } else {
+            if (tintColor != 0) {
+                drawable.mutate().setColorFilter(tintColor, PorterDuff.Mode.SRC_IN);
+            }
+        }
     }
 
 }
