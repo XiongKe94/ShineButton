@@ -263,6 +263,7 @@ public class ShineButton extends PorterImageView {
         shakeAnimator.setInterpolator(new LinearInterpolator());
         shakeAnimator.setDuration(500);
         shakeAnimator.setStartDelay(180);
+        this.invalidate();
         shakeAnimator.addUpdateListener(valueAnimator -> {
             setScaleX((float) valueAnimator.getAnimatedValue());
             setScaleY((float) valueAnimator.getAnimatedValue());
