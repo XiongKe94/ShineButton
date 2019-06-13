@@ -45,6 +45,15 @@ public class ShineButton extends AppCompatImageView {
     private ValueAnimator shakeAnimator;
     private ShineView.ShineParams shineParams = new ShineView.ShineParams();
     private OnCheckedChangeListener listener;
+    private OnClickInterceptListener onClickInterceptListener;
+
+    public interface OnCheckedChangeListener {
+        void onCheckedChanged(View view, boolean checked);
+    }
+
+    public interface OnClickInterceptListener {
+        boolean onIntercept();
+    }
 
     public ShineButton(Context context) {
         super(context);
@@ -203,6 +212,19 @@ public class ShineButton extends AppCompatImageView {
         shineParams.maskColor = maskColor;
     }
 
+    public void setShapeResource(int checkRaw, int unCheckRaw) {
+        checkDrawable = ContextCompat.getDrawable(activity, checkRaw);
+        unCheckDrawable = ContextCompat.getDrawable(activity, unCheckRaw);
+    }
+
+    public void setOnCheckStateChangeListener(OnCheckedChangeListener listener) {
+        this.listener = listener;
+    }
+
+    public void setOnClickInterceptListener(OnClickInterceptListener onClickInterceptListener) {
+        this.onClickInterceptListener = onClickInterceptListener;
+    }
+
     @Override
     public void setOnClickListener(OnClickListener l) {
         if (l instanceof OnButtonClickListener) {
@@ -212,10 +234,6 @@ public class ShineButton extends AppCompatImageView {
                 onButtonClickListener.setListener(l);
             }
         }
-    }
-
-    public void setOnCheckStateChangeListener(OnCheckedChangeListener listener) {
-        this.listener = listener;
     }
 
     @Override
@@ -255,11 +273,6 @@ public class ShineButton extends AppCompatImageView {
         }
     }
 
-    public void setShapeResource(int checkRaw, int unCheckRaw) {
-        checkDrawable = ContextCompat.getDrawable(activity, checkRaw);
-        unCheckDrawable = ContextCompat.getDrawable(activity, unCheckRaw);
-    }
-
     private void doShareAnim() {
         shakeAnimator = ValueAnimator.ofFloat(0.4f, 1f, 0.9f, 1f);
         shakeAnimator.setInterpolator(new LinearInterpolator());
@@ -285,22 +298,18 @@ public class ShineButton extends AppCompatImageView {
         }
     }
 
-    public class OnButtonClickListener implements OnClickListener {
-        public void setListener(OnClickListener listener) {
+    private class OnButtonClickListener implements OnClickListener {
+        private OnClickListener listener;
+
+        private void setListener(OnClickListener listener) {
             this.listener = listener;
-        }
-
-        OnClickListener listener;
-
-        public OnButtonClickListener() {
-        }
-
-        public OnButtonClickListener(OnClickListener l) {
-            listener = l;
         }
 
         @Override
         public void onClick(View view) {
+            if (onClickInterceptListener != null && onClickInterceptListener.onIntercept()) {
+                return;
+            }
             if (!isChecked) {
                 isChecked = true;
                 showAnim();
@@ -314,10 +323,6 @@ public class ShineButton extends AppCompatImageView {
                 listener.onClick(view);
             }
         }
-    }
-
-    public interface OnCheckedChangeListener {
-        void onCheckedChanged(View view, boolean checked);
     }
 
     public void updateViewState() {
