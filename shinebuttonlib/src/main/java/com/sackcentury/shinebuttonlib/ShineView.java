@@ -70,6 +70,7 @@ public class ShineView extends View {
     float clickValue = 0;
     boolean isRun = false;
     private float distanceOffset = 0.2f;
+    private int maskColor;
 
 
     public ShineView(Context context) {
@@ -95,7 +96,7 @@ public class ShineView extends View {
         paint.setStrokeCap(Paint.Cap.ROUND);
 
         paint2 = new Paint();
-        paint2.setColor(Color.WHITE);
+        paint2.setColor(this.maskColor);
         paint2.setStrokeWidth(20);
         paint2.setStrokeCap(Paint.Cap.ROUND);
 
@@ -286,6 +287,8 @@ public class ShineView extends View {
         public float smallShineOffsetAngle = 20;
         public int smallShineColor = 0;
         public int shineSize = 0;
+
+        public int maskColor=Color.WHITE;
     }
 
     private void initShineParams(ShineParams shineParams, ShineButton shineButton) {
@@ -300,6 +303,7 @@ public class ShineView extends View {
         smallShineColor = shineParams.smallShineColor;
         bigShineColor = shineParams.bigShineColor;
         shineSize = shineParams.shineSize;
+        maskColor = shineParams.maskColor;
         if (smallShineColor == 0) {
             smallShineColor = colorRandom[6];
         }

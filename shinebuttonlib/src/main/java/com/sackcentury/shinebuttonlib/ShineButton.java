@@ -81,6 +81,7 @@ public class ShineButton extends AppCompatImageView {
         shineParams.smallShineColor = a.getColor(R.styleable.ShineButton_small_shine_color, shineParams.smallShineColor);
         shineParams.smallShineOffsetAngle = a.getFloat(R.styleable.ShineButton_small_shine_offset_angle, shineParams.smallShineOffsetAngle);
         shineParams.shineSize = a.getDimensionPixelSize(R.styleable.ShineButton_shine_size, shineParams.shineSize);
+        shineParams.maskColor = a.getColor(R.styleable.ShineButton_mask_color, shineParams.maskColor);
         checkDrawable = a.getDrawable(R.styleable.ShineButton_checkDrawable);
         unCheckDrawable = a.getDrawable(R.styleable.ShineButton_unCheckDrawable);
         a.recycle();
@@ -196,6 +197,10 @@ public class ShineButton extends AppCompatImageView {
 
     public void setShineSize(int size) {
         shineParams.shineSize = size;
+    }
+
+    public void setMaskColor(int maskColor) {
+        shineParams.maskColor = maskColor;
     }
 
     @Override

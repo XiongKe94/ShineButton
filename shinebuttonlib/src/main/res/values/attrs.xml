@@ -16,5 +16,6 @@
         <attr name="shine_size" format="dimension" />
         <attr name="checkDrawable" format="integer|reference" />
         <attr name="unCheckDrawable" format="integer|reference" />
+        <attr name="mask_color" format="integer"/>
     </declare-styleable>
 </resources>
