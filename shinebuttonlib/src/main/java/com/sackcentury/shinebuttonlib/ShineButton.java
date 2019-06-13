@@ -1,6 +1,5 @@
 package com.sackcentury.shinebuttonlib;
 
-import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
@@ -85,7 +84,7 @@ public class ShineButton extends AppCompatImageView {
         checkDrawable = a.getDrawable(R.styleable.ShineButton_checkDrawable);
         unCheckDrawable = a.getDrawable(R.styleable.ShineButton_unCheckDrawable);
         a.recycle();
-        updateDrawableState();
+        updateViewState();
     }
 
 
@@ -112,12 +111,10 @@ public class ShineButton extends AppCompatImageView {
 
     public void setUnCheckColor(int unCheckColor) {
         this.unCheckColor = unCheckColor;
-        updateDrawableState();
     }
 
     public void setCheckColor(int checkColor) {
         this.checkColor = checkColor;
-        updateDrawableState();
     }
 
     public void setChecked(boolean checked, boolean anim) {
@@ -127,15 +124,13 @@ public class ShineButton extends AppCompatImageView {
     private void setChecked(boolean checked, boolean anim, boolean callBack) {
         isChecked = checked;
         if (checked) {
-            updateDrawableState();
-            isChecked = true;
-            if (anim)
+            if (anim) {
                 showAnim();
+            }
         } else {
-            updateDrawableState();
-            isChecked = false;
-            if (anim)
+            if (anim) {
                 setCancel();
+            }
         }
         if (callBack) {
             onListenerUpdate(checked);
@@ -153,7 +148,6 @@ public class ShineButton extends AppCompatImageView {
     }
 
     public void setCancel() {
-        updateDrawableState();
         if (shakeAnimator != null) {
             shakeAnimator.end();
             shakeAnimator.cancel();
@@ -259,7 +253,6 @@ public class ShineButton extends AppCompatImageView {
     public void setShapeResource(int checkRaw, int unCheckRaw) {
         checkDrawable = ContextCompat.getDrawable(activity, checkRaw);
         unCheckDrawable = ContextCompat.getDrawable(activity, unCheckRaw);
-        updateDrawableState();
     }
 
     private void doShareAnim() {
@@ -271,27 +264,6 @@ public class ShineButton extends AppCompatImageView {
         shakeAnimator.addUpdateListener(valueAnimator -> {
             setScaleX((float) valueAnimator.getAnimatedValue());
             setScaleY((float) valueAnimator.getAnimatedValue());
-        });
-        shakeAnimator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animator) {
-                updateDrawableState();
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animator) {
-                updateDrawableState();
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animator) {
-                updateDrawableState();
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {
-
-            }
         });
         shakeAnimator.start();
     }
@@ -331,6 +303,7 @@ public class ShineButton extends AppCompatImageView {
                 isChecked = false;
                 setCancel();
             }
+            updateViewState();
             onListenerUpdate(isChecked);
             if (listener != null) {
                 listener.onClick(view);
@@ -342,7 +315,7 @@ public class ShineButton extends AppCompatImageView {
         void onCheckedChanged(View view, boolean checked);
     }
 
-    private void updateDrawableState() {
+    public void updateViewState() {
         if (isChecked) {
             if (checkDrawable != null) {
                 tintImageViewDrawable(checkDrawable, checkColor);
@@ -355,17 +328,14 @@ public class ShineButton extends AppCompatImageView {
     }
 
     private void tintImageViewDrawable(Drawable drawable, int tintColor) {
-        Drawable drawable1 = DrawableCompat.wrap(drawable);
-        this.setBackgroundDrawable(drawable1);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (tintColor != 0) {
+        Drawable drawable1 = DrawableCompat.wrap(drawable.mutate());
+        if (tintColor != 0) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 DrawableCompat.setTint(drawable, tintColor);
-            }
-        } else {
-            if (tintColor != 0) {
-                drawable.mutate().setColorFilter(tintColor, PorterDuff.Mode.SRC_IN);
+            } else {
+                drawable.setColorFilter(tintColor, PorterDuff.Mode.SRC_IN);
             }
         }
+        this.setImageDrawable(drawable1);
     }
-
 }

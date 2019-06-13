@@ -27,7 +27,7 @@
                 android:elevation="10dp"
                 app:checkColor="#f26d7d"
                 app:checkDrawable="@raw/heart"
-                app:unCheckColor="@android:color/darker_gray"
+                app:unCheckColor="@android:color/transparent"
                 app:unCheckDrawable="@raw/like" />
 
         </RelativeLayout>
