@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -20,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.LinearInterpolator;
 
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 
@@ -31,23 +31,21 @@ import androidx.core.graphics.drawable.DrawableCompat;
  * @date
  * @since 16/7/5 下午2:27
  **/
-public class ShineButton extends PorterImageView {
+public class ShineButton extends AppCompatImageView {
     private static final String TAG = "ShineButton";
-    private boolean isChecked = false;
-
+    Activity activity;
+    private boolean isChecked;
     private int unCheckColor;
     private int checkColor;
+    private int bottomHeight;
+    private int realBottomHeight;
     private Drawable checkDrawable;
     private Drawable unCheckDrawable;
     private DisplayMetrics metrics = new DisplayMetrics();
-
-    Activity activity;
-    private ShineView shineView;
+    private OnButtonClickListener onButtonClickListener;
     private ValueAnimator shakeAnimator;
     private ShineView.ShineParams shineParams = new ShineView.ShineParams();
     private OnCheckedChangeListener listener;
-    private int bottomHeight;
-    private int realBottomHeight;
 
     public ShineButton(Context context) {
         super(context);
@@ -88,6 +86,13 @@ public class ShineButton extends PorterImageView {
         unCheckDrawable = a.getDrawable(R.styleable.ShineButton_unCheckDrawable);
         a.recycle();
         updateDrawableState();
+    }
+
+
+    public void init(Activity activity) {
+        this.activity = activity;
+        onButtonClickListener = new OnButtonClickListener();
+        setOnClickListener(onButtonClickListener);
     }
 
     public int getBottomHeight(boolean real) {
@@ -214,28 +219,27 @@ public class ShineButton extends PorterImageView {
         this.listener = listener;
     }
 
-    private OnButtonClickListener onButtonClickListener;
-
-    public void init(Activity activity) {
-        this.activity = activity;
-        onButtonClickListener = new OnButtonClickListener();
-        setOnClickListener(onButtonClickListener);
-    }
-
-    @Override
-    protected void paintMaskCanvas(Canvas maskCanvas, Paint maskPaint, int width, int height) {
-    }
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         calPixels();
     }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        if (widthMeasureSpec == 0) {
+            widthMeasureSpec = 50;
+        }
+        if (heightMeasureSpec == 0) {
+            heightMeasureSpec = 50;
+        }
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+
     public void showAnim() {
         if (activity != null) {
             final ViewGroup rootView = activity.findViewById(Window.ID_ANDROID_CONTENT);
-            shineView = new ShineView(activity, this, shineParams);
+            ShineView shineView = new ShineView(activity, this, shineParams);
             rootView.addView(shineView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             doShareAnim();
         } else {
@@ -292,11 +296,6 @@ public class ShineButton extends PorterImageView {
         shakeAnimator.start();
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-    }
-
     private void calPixels() {
         if (activity != null && metrics != null) {
             activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -343,7 +342,7 @@ public class ShineButton extends PorterImageView {
         void onCheckedChanged(View view, boolean checked);
     }
 
-    protected void updateDrawableState() {
+    private void updateDrawableState() {
         if (isChecked) {
             if (checkDrawable != null) {
                 tintImageViewDrawable(checkDrawable, checkColor);
