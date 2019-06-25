@@ -7,7 +7,7 @@ def gitUrl = 'https://github.com/XiongKe94/ShineButton.git'
 
 group = "com.github.xk"
 
-version = "2.2"
+version = "2.3"
 
 android {
     compileSdkVersion 28
