@@ -13,9 +13,7 @@ import android.graphics.RectF;
 import android.os.Build;
 import android.provider.Settings;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import java.util.Random;
@@ -198,7 +196,7 @@ public class ShineView extends View {
             }
         } else {
             centerAnimY = getMeasuredHeight() - shineButton.getBottomHeight(false) + btnHeight / 2;
-            if (isFullScreenNavigationBarExist(shineButton.activity)) {
+            if (isFullScreenXiaoMiNavigationBarExist(shineButton.activity)) {
                 centerAnimY = centerAnimY - getNavigationBarHeight(shineButton.activity);
             }
         }
@@ -363,26 +361,12 @@ public class ShineView extends View {
         return Build.MANUFACTURER.toLowerCase().equals("xiaomi");
     }
 
-    private boolean isFullScreenNavigationBarExist(Activity mActivity) {
+    private boolean isFullScreenXiaoMiNavigationBarExist(Activity mActivity) {
         if (isXiaoMiPhone()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 return Settings.Global.getInt(mActivity.getContentResolver(), "force_fsg_nav_bar", 0) != 0;
             }
-        } else {
-            View view = mActivity.getWindow().getDecorView();
-            if (view instanceof ViewGroup) {
-                ViewGroup viewGroup = (ViewGroup) view;
-                for (int i = 0; i < viewGroup.getChildCount(); i++) {
-                    View childView = viewGroup.getChildAt(i);
-                    if (childView != null
-                            && childView.getId() != View.NO_ID
-                            && "navigationBarBackground".equals(mActivity.getResources().getResourceEntryName(childView.getId()))) {
-                        return true;
-                    }
-                }
-            }
         }
-
         return false;
     }
 
