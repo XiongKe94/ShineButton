@@ -13,6 +13,8 @@ import android.graphics.RectF;
 import android.os.Build;
 import android.provider.Settings;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -196,7 +198,7 @@ public class ShineView extends View {
             }
         } else {
             centerAnimY = getMeasuredHeight() - shineButton.getBottomHeight(false) + btnHeight / 2;
-            if (isFullScreenXiaoMiNavigationBarExist(shineButton.activity)) {
+            if (isOpenFullScreen(shineButton.activity)) {
                 centerAnimY = centerAnimY - getNavigationBarHeight(shineButton.activity);
             }
         }
@@ -361,12 +363,28 @@ public class ShineView extends View {
         return Build.MANUFACTURER.toLowerCase().equals("xiaomi");
     }
 
-    private boolean isFullScreenXiaoMiNavigationBarExist(Activity mActivity) {
+    private boolean isOpenFullScreen(Activity mActivity) {
         if (isXiaoMiPhone()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                return Settings.Global.getInt(mActivity.getContentResolver(), "force_fsg_nav_bar", 0) != 0;
+                return Settings.Global.getInt(mActivity.getContentResolver(), "force_fsg_nav_bar", 0) == 1;
             }
         }
+        //底部导航栏没有上色时候不准确
+        /*else {
+            View decorView = mActivity.getWindow().getDecorView();
+            if (decorView instanceof ViewGroup) {
+                ViewGroup viewGroup = (ViewGroup) decorView;
+                for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                    View childView = viewGroup.getChildAt(i);
+                    if (childView != null
+                            && childView.getId() != View.NO_ID
+                            && "navigationBarBackground".equals(mActivity.getResources().getResourceEntryName(childView.getId()))) {
+                        return true;
+                    }
+                }
+            }
+
+        }*/
         return false;
     }
 
@@ -374,9 +392,25 @@ public class ShineView extends View {
         int height = 0;
         Resources resources = mActivity.getResources();
         int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
-        if (resourceId > 0) {
+        if (resourceId > 0 && checkHasNavigationBar(mActivity)) {
             height = resources.getDimensionPixelSize(resourceId);
         }
         return height;
+    }
+
+    private boolean checkHasNavigationBar(Activity mActivity) {
+        WindowManager windowManager = mActivity.getWindowManager();
+        Display display = windowManager.getDefaultDisplay();
+        DisplayMetrics realDisplayMetrics = new DisplayMetrics();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            display.getRealMetrics(realDisplayMetrics);
+        }
+        int realHeight = realDisplayMetrics.heightPixels;
+        int realWidth = realDisplayMetrics.widthPixels;
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        display.getMetrics(displayMetrics);
+        int displayHeight = displayMetrics.heightPixels;
+        int displayWidth = displayMetrics.widthPixels;
+        return realWidth - displayWidth > 0 || realHeight - displayHeight > 0;
     }
 }
