@@ -33,10 +33,11 @@
                     android:layout_centerInParent="true"
                     android:src="@android:color/darker_gray"
                     android:id="@+id/po_image1"
-                    app:btn_color="@android:color/darker_gray"
-                    app:btn_fill_color="#F44336"
+                    app:un_check_color="@android:color/darker_gray"
+                    app:check_color="#F44336"
                     app:allow_random_color="true"
-                    app:siShape="@raw/smile" />
+                    app:checkDrawable="@raw/smile"
+                    app:unCheckDrawable="@raw/smile" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -50,10 +51,12 @@
                     android:layout_centerInParent="true"
                     android:src="@android:color/darker_gray"
                     android:id="@+id/po_image2"
-                    app:btn_color="@android:color/darker_gray"
-                    app:btn_fill_color="#F44336"
+                    app:un_check_color="@android:color/darker_gray"
+                    app:check_color="#F44336"
                     app:allow_random_color="true"
-                    app:siShape="@raw/smile" />
+                    app:checkDrawable="@raw/smile"
+                    app:unCheckDrawable="@raw/smile"
+                    />
             </RelativeLayout>
 
             <RelativeLayout
@@ -67,10 +70,11 @@
                     android:layout_centerInParent="true"
                     android:src="@android:color/darker_gray"
                     android:id="@+id/po_image3"
-                    app:btn_color="@android:color/darker_gray"
-                    app:btn_fill_color="#F44336"
+                    app:un_check_color="@android:color/darker_gray"
+                    app:check_color="#F44336"
                     app:allow_random_color="true"
-                    app:siShape="@raw/smile" />
+                    app:checkDrawable="@raw/smile"
+                    app:unCheckDrawable="@raw/smile"/>
             </RelativeLayout>
         </LinearLayout>
 

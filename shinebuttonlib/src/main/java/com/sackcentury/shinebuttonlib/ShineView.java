@@ -2,17 +2,13 @@ package com.sackcentury.shinebuttonlib;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 
 import com.daasuu.ei.Ease;
 import com.daasuu.ei.EasingInterpolator;
@@ -192,7 +188,8 @@ public class ShineView extends View {
             }
             canvas.drawArc(rectFSmall, 360f / shineCount * i + 1 - smallOffsetAngle + ((value - 1) * turnAngle), 0.1f, false, getConfigPaint(paintSmall));
         }
-        paint.setStrokeWidth(btnWidth * (clickValue) * (shineDistanceMultiple - distanceOffset));
+        //4.3手机无法绘制圆圈
+        //paint.setStrokeWidth(btnWidth * (clickValue) * (shineDistanceMultiple - distanceOffset));
         if (clickValue != 0) {
             paint2.setStrokeWidth(btnWidth * (clickValue) * (shineDistanceMultiple - distanceOffset) - 8);
         } else {
@@ -243,6 +240,7 @@ public class ShineView extends View {
         public float smallShineOffsetAngle = 20;
         public int smallShineColor = 0;
         public int shineSize = 0;
+        public int maskColor=0;
     }
 
     private void initShineParams(ShineParams shineParams, ShineButton shineButton) {

@@ -3,9 +3,7 @@ package com.sackcentury.shinebutton;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,6 +12,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.sackcentury.shinebuttonlib.ShineButton;
 
@@ -59,9 +59,9 @@ public class MainActivity extends AppCompatActivity {
 
         ShineButton shineButtonJava = new ShineButton(this);
 
-        shineButtonJava.setBtnColor(Color.GRAY);
-        shineButtonJava.setBtnFillColor(Color.RED);
-        shineButtonJava.setShapeResource(R.raw.heart);
+        shineButtonJava.setUnCheckColor(Color.GRAY);
+        shineButtonJava.setCheckColor(Color.RED);
+        shineButtonJava.setShapeResource(R.raw.heart, R.raw.heart);
         shineButtonJava.setAllowRandomColor(true);
         shineButtonJava.setShineSize(100);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(100, 100);

@@ -23,9 +23,10 @@
                 android:layout_height="50dp"
                 android:layout_centerInParent="true"
                 android:id="@+id/po_image0"
-                app:btn_color="@android:color/darker_gray"
-                app:btn_fill_color="#f26d7d"
-                app:siShape="@raw/heart"
+                app:un_check_color="@android:color/darker_gray"
+                app:check_color="#f26d7d"
+                app:checkDrawable="@raw/heart"
+                app:unCheckDrawable="@raw/heart"
                 android:elevation="10dp" />
 
         </RelativeLayout>
@@ -39,8 +40,8 @@
                 android:layout_centerInParent="true"
                 android:src="@android:color/darker_gray"
                 android:id="@+id/po_image1"
-                app:btn_color="@android:color/darker_gray"
-                app:btn_fill_color="#FF6666"
+                app:un_check_color="@android:color/darker_gray"
+                app:check_color="#FF6666"
                 app:allow_random_color="false"
                 app:enable_flashing="false"
                 app:big_shine_color="#FF6666"
@@ -51,7 +52,8 @@
                 app:shine_distance_multiple="1.5"
                 app:small_shine_color="#CC9999"
                 app:shine_count="15"
-                app:siShape="@raw/like"/>
+                app:checkDrawable="@raw/like"
+                app:unCheckDrawable="@raw/like"/>
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="0dp"
@@ -63,10 +65,11 @@
                 android:layout_centerInParent="true"
                 android:src="@android:color/darker_gray"
                 android:id="@+id/po_image2"
-                app:btn_color="@android:color/darker_gray"
-                app:btn_fill_color="#F44336"
+                app:un_check_color="@android:color/darker_gray"
+                app:check_color="#F44336"
                 app:allow_random_color="true"
-                app:siShape="@raw/smile"/>
+                app:checkDrawable="@raw/smile"
+                app:unCheckDrawable="@raw/smile"/>
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="0dp"
@@ -77,11 +80,12 @@
                 android:layout_height="50dp"
                 android:layout_centerInParent="true"
                 android:id="@+id/po_image3"
-                app:btn_color="@android:color/darker_gray"
-                app:btn_fill_color="#996699"
+                app:un_check_color="@android:color/darker_gray"
+                app:check_color="#996699"
                 app:enable_flashing="true"
                 app:shine_size="40dp"
-                app:siShape="@raw/star"/>
+                app:checkDrawable="@raw/star"
+                app:unCheckDrawable="@raw/star"/>
         </RelativeLayout>
     </LinearLayout>
 
@@ -168,9 +172,10 @@
                     android:layout_height="50dp"
                     android:layout_centerInParent="true"
                     android:id="@+id/po_image8"
-                    app:btn_color="#FF6666"
-                    app:btn_fill_color="#999933"
-                    app:siShape="@raw/heart"
+                    app:un_check_color="#FF6666"
+                    app:check_color="#999933"
+                    app:checkDrawable="@raw/heart"
+                    app:unCheckDrawable="@raw/heart"
                     android:layout_gravity="right"
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
