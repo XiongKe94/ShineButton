@@ -27,14 +27,14 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content">
 
-                <com.sackcentury.shinebuttonlib.ShineButton
+                <com.sackcentury.ShineButton
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_centerInParent="true"
                     android:src="@android:color/darker_gray"
                     android:id="@+id/po_image1"
-                    app:un_check_color="@android:color/darker_gray"
-                    app:check_color="#F44336"
+                    app:unCheckColor="@android:color/darker_gray"
+                    app:checkColor="#F44336"
                     app:allow_random_color="true"
                     app:checkDrawable="@raw/smile"
                     app:unCheckDrawable="@raw/smile" />
@@ -45,14 +45,14 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content">
 
-                <com.sackcentury.shinebuttonlib.ShineButton
+                <com.sackcentury.ShineButton
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_centerInParent="true"
                     android:src="@android:color/darker_gray"
                     android:id="@+id/po_image2"
-                    app:un_check_color="@android:color/darker_gray"
-                    app:check_color="#F44336"
+                    app:unCheckColor="@android:color/darker_gray"
+                    app:checkColor="#F44336"
                     app:allow_random_color="true"
                     app:checkDrawable="@raw/smile"
                     app:unCheckDrawable="@raw/smile"
@@ -64,14 +64,14 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content">
 
-                <com.sackcentury.shinebuttonlib.ShineButton
+                <com.sackcentury.ShineButton
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_centerInParent="true"
                     android:src="@android:color/darker_gray"
                     android:id="@+id/po_image3"
-                    app:un_check_color="@android:color/darker_gray"
-                    app:check_color="#F44336"
+                    app:unCheckColor="@android:color/darker_gray"
+                    app:checkColor="#F44336"
                     app:allow_random_color="true"
                     app:checkDrawable="@raw/smile"
                     app:unCheckDrawable="@raw/smile"/>

@@ -51,7 +51,7 @@ app:allow_random_color
 ![preview](https://github.com/ChadCSong/ShineButton/blob/master/image/demo_small.gif)
 
 ```xml
- <com.sackcentury.shinebuttonlib.ShineButton
+ <com.sackcentury.ShineButton
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_centerInParent="true"
@@ -93,7 +93,7 @@ app:enable_flashing="true"
 
 
  ```xml
- <com.sackcentury.shinebuttonlib.ShineButton
+ <com.sackcentury.ShineButton
                  android:layout_width="50dp"
                  android:layout_height="50dp"
                  android:layout_centerInParent="true"

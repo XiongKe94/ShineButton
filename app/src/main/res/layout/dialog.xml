@@ -13,14 +13,14 @@
         android:padding="10dp"
         android:text="ShineButton" />
 
-    <com.sackcentury.shinebuttonlib.ShineButton
+    <com.sackcentury.ShineButton
         android:id="@+id/po_image"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_gravity="right"
         android:layout_margin="20dp"
-        app:un_check_color="@android:color/darker_gray"
-        app:check_color="#996699"
+        app:unCheckColor="@android:color/darker_gray"
+        app:checkColor="#996699"
         app:enable_flashing="true"
         app:checkDrawable="@raw/star"
         app:unCheckDrawable="@raw/star"/>

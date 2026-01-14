@@ -13,5 +13,5 @@
         android:visibility="visible"
         android:divider="#dfdfdf"
         android:dividerHeight="0.01dp"
-        android:background="@android:color/white"></ListView>
+        android:background="@android:color/white"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
