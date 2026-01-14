@@ -109,7 +109,7 @@ object EasingProvider {
      * @return easedValue
      */
     private fun getBackInOut(elapsedTimeRate: Float, amount: Float): Float {
-        var a = amount * 1.525f
+        val a = amount * 1.525f
         var t = elapsedTimeRate * 2
         return if (t < 1) {
             (0.5 * (t * t * ((a + 1) * t - a))).toFloat()

@@ -1,0 +1,191 @@
+/**
+ * Maven Central 发布配置
+ * 
+ * 使用方法：
+ * 1. 在需要发布的模块的 build.gradle 中添加：
+ *    apply from: rootProject.file('maven-publish.gradle')
+ * 
+ * 2. 在模块的 build.gradle 中配置以下属性：
+ *    ext {
+ *        PUBLISH_GROUP_ID = 'com.github.xk'
+ *        PUBLISH_ARTIFACT_ID = 'shinebutton'
+ *        PUBLISH_VERSION = '2.6'
+ *        PUBLISH_DESCRIPTION = 'This is a UI lib for Android. Effects like shining.'
+ *        PUBLISH_URL = 'https://github.com/XiongKe94/ShineButton'
+ *        PUBLISH_LICENSE_NAME = 'The MIT License (MIT)'
+ *        PUBLISH_LICENSE_URL = 'https://raw.githubusercontent.com/XiongKe94/ShineButton/master/LICENSE'
+ *        PUBLISH_DEVELOPER_ID = 'xiongke'
+ *        PUBLISH_DEVELOPER_NAME = 'xiongke'
+ *        PUBLISH_DEVELOPER_EMAIL = 'm15117937934@163.com'
+ *    }
+ * 
+ * 3. 在 local.properties 中配置 Maven Central 认证信息：
+ *    MAVEN_CENTRAL_USERNAME=your_username
+ *    MAVEN_CENTRAL_PASSWORD=your_password
+ */
+
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+// 读取配置属性，如果没有设置则使用默认值
+def getGroupId() {
+    return project.findProperty("PUBLISH_GROUP_ID") ?: project.group
+}
+
+def getArtifactId() {
+    return project.findProperty("PUBLISH_ARTIFACT_ID") ?: project.name
+}
+
+def getVersionName() {
+    return project.findProperty("PUBLISH_VERSION") ?: project.version
+}
+
+def getDescription() {
+    return project.findProperty("PUBLISH_DESCRIPTION") ?: ""
+}
+
+def getSiteUrl() {
+    return project.findProperty("PUBLISH_URL") ?: ""
+}
+
+def getGitUrl() {
+    def siteUrl = getSiteUrl()
+    return siteUrl ? "${siteUrl}.git" : ""
+}
+
+def getLicenseName() {
+    return project.findProperty("PUBLISH_LICENSE_NAME") ?: "The Apache Software License, Version 2.0"
+}
+
+def getLicenseUrl() {
+    return project.findProperty("PUBLISH_LICENSE_URL") ?: "https://www.apache.org/licenses/LICENSE-2.0.txt"
+}
+
+def getDeveloperId() {
+    return project.findProperty("PUBLISH_DEVELOPER_ID") ?: ""
+}
+
+def getDeveloperName() {
+    return project.findProperty("PUBLISH_DEVELOPER_NAME") ?: ""
+}
+
+def getDeveloperEmail() {
+    return project.findProperty("PUBLISH_DEVELOPER_EMAIL") ?: ""
+}
+
+// 读取 Maven Central 认证信息
+def getMavenCentralUsername() {
+    return project.findProperty("MAVEN_CENTRAL_USERNAME") ?: ""
+}
+
+def getMavenCentralPassword() {
+    return project.findProperty("MAVEN_CENTRAL_PASSWORD") ?: ""
+}
+
+// 配置 Android 发布变体
+if (project.plugins.hasPlugin('com.android.library')) {
+    android {
+        publishing {
+            singleVariant("release") {
+                withSourcesJar()
+                withJavadocJar()
+            }
+        }
+    }
+}
+
+afterEvaluate {
+    // 预先获取所有值，避免在 POM 配置中访问属性时产生循环引用
+    def publishGroupId = getGroupId()
+    def publishArtifactId = getArtifactId()
+    def publishVersion = getVersionName()
+    def publishDescription = getDescription()
+    def publishUrl = getSiteUrl()
+    def publishLicenseName = getLicenseName()
+    def publishLicenseUrl = getLicenseUrl()
+    def publishDeveloperId = getDeveloperId()
+    def publishDeveloperName = getDeveloperName()
+    def publishDeveloperEmail = getDeveloperEmail()
+    def publishGitUrl = getGitUrl()
+    
+    publishing {
+        publications {
+            release(MavenPublication) {
+                // 根据项目类型选择组件
+                if (project.plugins.hasPlugin('com.android.library')) {
+                    from components.release
+                } else if (project.plugins.hasPlugin('java-library')) {
+                    from components.java
+                } else if (project.plugins.hasPlugin('java')) {
+                    from components.java
+                }
+
+                groupId = publishGroupId
+                artifactId = publishArtifactId
+                version = publishVersion
+
+                pom {
+                    name.set(publishArtifactId)
+                    if (publishDescription) {
+                        description.set(publishDescription)
+                    }
+                    if (publishUrl) {
+                        url.set(publishUrl)
+                    }
+
+                    licenses {
+                        license {
+                            name.set(publishLicenseName)
+                            url.set(publishLicenseUrl)
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id.set(publishDeveloperId)
+                            name.set(publishDeveloperName)
+                            email.set(publishDeveloperEmail)
+                        }
+                    }
+
+                    scm {
+                        if (publishGitUrl) {
+                            connection.set("scm:git:${publishGitUrl}")
+                            developerConnection.set("scm:git:${publishGitUrl}")
+                        }
+                        if (publishUrl) {
+                            url.set(publishUrl)
+                        }
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                name = "MavenCentral"
+                url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+                credentials {
+                    username = getMavenCentralUsername()
+                    password = getMavenCentralPassword()
+                }
+            }
+        }
+    }
+
+    signing {
+        // Maven Central 需要 GPG 签名
+        // 方式1: 使用系统 GPG 命令（推荐，需要系统已安装 GPG）
+        useGpgCmd()
+        sign publishing.publications.release
+        
+        // 方式2: 如果使用内存中的 GPG 密钥，取消下面的注释并填写信息
+        // def gpgKeyId = project.findProperty("GPG_KEY_ID")
+        // def gpgPassword = project.findProperty("GPG_PASSWORD")
+        // def gpgSecretKeyRingFile = project.findProperty("GPG_SECRET_KEY_RING_FILE")
+        // if (gpgKeyId && gpgPassword && gpgSecretKeyRingFile) {
+        //     useInMemoryPgpKeys(gpgKeyId, gpgPassword, file(gpgSecretKeyRingFile))
+        //     sign publishing.publications.release
+        // }
+    }
+}

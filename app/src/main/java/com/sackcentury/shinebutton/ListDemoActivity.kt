@@ -53,7 +53,7 @@ class ListDemoActivity : Activity() {
             val button = itemView.findViewById<ShineButton>(R.id.po_image)
             val textView = itemView.findViewById<TextView>(R.id.text_item_id)
             textView.text = "ShineButton Position $i"
-          
+
             return itemView
         }
     }

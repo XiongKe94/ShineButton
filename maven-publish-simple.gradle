@@ -1,0 +1,120 @@
+/**
+ * 简化版 Maven 发布配置（无需 GPG 签名）
+ * 
+ * 支持发布到：
+ * 1. GitHub Packages（推荐，最简单）
+ * 2. JitPack（最简单，只需 GitHub 仓库）
+ * 3. 私有 Maven 仓库
+ * 
+ * 使用方法：
+ * 1. 在需要发布的模块的 build.gradle 中添加：
+ *    apply from: rootProject.file('maven-publish-simple.gradle')
+ * 
+ * 2. 在模块的 build.gradle 中配置以下属性：
+ *    ext {
+ *        PUBLISH_GROUP_ID = 'com.github.xk'
+ *        PUBLISH_ARTIFACT_ID = 'shinebutton'
+ *        PUBLISH_VERSION = '2.6'
+ *        PUBLISH_DESCRIPTION = 'This is a UI lib for Android. Effects like shining.'
+ *        PUBLISH_URL = 'https://github.com/XiongKe94/ShineButton'
+ *    }
+ * 
+ * 3. 选择发布目标并配置认证信息（在 local.properties 中）：
+ *    - GitHub Packages: GITHUB_USERNAME=your_username, GITHUB_TOKEN=your_token
+ *    - 私有仓库: 配置对应的用户名和密码
+ */
+
+apply plugin: 'maven-publish'
+
+// 读取配置属性
+def getGroupId() {
+    return project.findProperty("PUBLISH_GROUP_ID") ?: project.group
+}
+
+def getArtifactId() {
+    return project.findProperty("PUBLISH_ARTIFACT_ID") ?: project.name
+}
+
+def getVersionName() {
+    return project.findProperty("PUBLISH_VERSION") ?: project.version
+}
+
+def getDescription() {
+    return project.findProperty("PUBLISH_DESCRIPTION") ?: ""
+}
+
+def getSiteUrl() {
+    return project.findProperty("PUBLISH_URL") ?: ""
+}
+
+// 配置 Android 发布变体
+if (project.plugins.hasPlugin('com.android.library')) {
+    android {
+        publishing {
+            singleVariant("release") {
+                withSourcesJar()
+                withJavadocJar()
+            }
+        }
+    }
+}
+
+afterEvaluate {
+    // 预先获取所有值，避免循环引用
+    def publishGroupId = getGroupId()
+    def publishArtifactId = getArtifactId()
+    def publishVersion = getVersionName()
+    def publishDescription = getDescription()
+    def publishUrl = getSiteUrl()
+    
+    publishing {
+        publications {
+            release(MavenPublication) {
+                // 根据项目类型选择组件
+                if (project.plugins.hasPlugin('com.android.library')) {
+                    from components.release
+                } else if (project.plugins.hasPlugin('java-library')) {
+                    from components.java
+                } else if (project.plugins.hasPlugin('java')) {
+                    from components.java
+                }
+
+                groupId = publishGroupId
+                artifactId = publishArtifactId
+                version = publishVersion
+
+                pom {
+                    name.set(publishArtifactId)
+                    if (publishDescription) {
+                        description.set(publishDescription)
+                    }
+                    if (publishUrl) {
+                        url.set(publishUrl)
+                    }
+                }
+            }
+        }
+
+        repositories {
+            // 选项1: GitHub Packages（推荐，最简单）
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/XiongKe94/ShineButton")
+                credentials {
+                    username = project.findProperty("GITHUB_USERNAME") ?: System.getenv("GITHUB_USERNAME") ?: ""
+                    password = project.findProperty("GITHUB_TOKEN") ?: System.getenv("GITHUB_TOKEN") ?: ""
+                }
+            }
+            
+            // 选项2: 私有 Maven 仓库（如果有）
+            // maven {
+            //     name = "PrivateMaven"
+            //     url = uri("https://your-maven-repo.com/repository/maven-releases/")
+            //     credentials {
+            //         username = project.findProperty("MAVEN_USERNAME") ?: ""
+            //         password = project.findProperty("MAVEN_PASSWORD") ?: ""
+            //     }
+            // }
+        }
+    }
+}
